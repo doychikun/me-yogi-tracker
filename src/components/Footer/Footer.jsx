@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <Box className="footer">
       <Stack className="footer-stack">
-        <img src={Logo} alt="logo" className="footer-logo" />
+        <img src={Logo} alt="MeYogi logo" className="footer-logo" />
         <Link to="/about-us" className="footer-nav">
           <Typography id="footer-text">
             Made with <FavoriteTwoToneIcon /> by Nikola, Sasho and Yana
