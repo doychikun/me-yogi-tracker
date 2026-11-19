@@ -14,7 +14,13 @@
     npm start
     ```
   - The "Yogi Practices" videos come from the RapidAPI YouTube search API. Copy `.env.example` to `.env.local` and set `REACT_APP_RAPIDAPI_KEY` to your own key before running `npm start` (restart the dev server after changing it). Note that any `REACT_APP_` value is bundled into the built site, so use a key restricted to this API.
-  - We are also using Google Firebase Hosting service. You can check our project by using the following link: https://meyogi-6924a.web.app/
+  - The live app is hosted on Firebase Hosting: https://meyogi-6924a.web.app/
+  - Firebase project: `meyogi-6924a` (free Spark plan). To deploy the site and the Realtime Database rules from `database.rules.json`, run:
+
+    ```
+    npm run build
+    firebase deploy --only hosting,database
+    ```
 
 ## List of features:
 
@@ -27,6 +33,8 @@
   - **Yogi Practices** - Provides you with access to yoga videos. You can choose between 5 yoga styles - Vinyasa Flow, Hatha, Ashtanga, Yin or Mindfulness yoga. You can change what videos to be presented with a click of a button. The videos for the selected yoga style are split into pages of 8. When you click on a video, a new tab will open in the browser and the video will start.
 
   - **Yogi Goals** - Gives you the opportunity to track individual yoga progress and add goals. You can choose between 5 yoga styles and add/edit progress for each. You can also add/edit/remove different kind of goals and track progress for each as well. You can filter goals with the use of the calendar. There is also the opportunity to search for goals, access goals set by other users and add these to your dashboard.
+
+  - **Poses & Flows** - A library of yoga poses and a timed flow player that guides you through a sequence of poses.
 
   - **Profile** - Lets you upload a profile image and access basic information about your profile, such as username, email, phone number, etc. You can also edit your profile information with a click of a button.
 
@@ -42,7 +50,7 @@ The project is written in:
 
 We also used the following libraries and packets:
 
-- Google Firebase Platform - App development platform. Used for backend purposes - authentication, realtime database, storage solutions.
+- Google Firebase Platform - App development platform. Used for backend purposes - authentication, Realtime Database and hosting. Profile pictures are stored in the Realtime Database, so the app runs on the free Spark plan without Cloud Storage.
 
 - Material UI - Intuitive React UI tools
 
