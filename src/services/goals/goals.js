@@ -5,8 +5,10 @@ export const getAllGoals = () => {
   return get(query(ref(db, 'goals')))
 }
 
-export const getAllCustomerGoals = ({ owner }) => {
-  return get(query(ref(db, `goals/${owner}`)))
+// Resolves to the owner's goals as an array (empty when they have none).
+export const getUserGoals = ({ owner }) => {
+  return get(ref(db, `goals/${owner}`))
+    .then(snapshot => snapshot.exists() ? Object.values(snapshot.val()) : [])
 }
 
 export const createGoal = ({ id, name, owner, goal, progress, unit, from, to }) => {
@@ -16,14 +18,14 @@ export const createGoal = ({ id, name, owner, goal, progress, unit, from, to }) 
     owner,
     goal,
     progress,
-    unit,
+    unit: unit ?? '',
     from,
     to,
   })
 }
 
 export const updateGoal = ({ id, owner, updates }) => {
-  return set(ref(db, `goals/${owner}/${id}`), updates)
+  return set(ref(db, `goals/${owner}/${id}`), { ...updates, id, owner })
 }
 
 export const removeGoal = ({ id, owner }) => {

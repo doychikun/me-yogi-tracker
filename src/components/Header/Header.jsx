@@ -22,6 +22,8 @@ const Header = () => {
     profile: {component: Profile, title: 'User Profile'}
   };
  
+  const DialogBody = dialogComponents[dialogComponent].component;
+
   const handleClose = () => setOpenDialog(false);
  
   const handleDialog = (page) => {
@@ -91,11 +93,12 @@ const Header = () => {
         )}
       </Stack>
       <CustomDialog
-        Component={dialogComponents[dialogComponent].component}
         title={dialogComponents[dialogComponent].title}
         open={openDialog}
         close={handleClose}
-      />
+      >
+        <DialogBody close={handleClose} />
+      </CustomDialog>
     </Stack>
   );
 };

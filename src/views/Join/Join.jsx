@@ -1,10 +1,25 @@
 import "./Join.css";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
+import AppContext from "../../providers/AppContext";
 import { createUser, isUsernameTaken } from "../../services/users.service";
-import { registerUser } from "../../services/auth.service";
+import { deleteAccount, registerUser } from "../../services/auth.service";
 import { toast } from "react-toastify";
 
+const TOAST_OPTIONS = { position: toast.POSITION.TOP_CENTER, autoClose: 3000 };
+
+const signUpErrorMessage = (err) => {
+  const message = err?.message || "";
+  if (message.includes("email-already-in-use")) return "Email is in use!";
+  if (message.includes("invalid-email")) return "Please enter a valid email address!";
+  if (message.includes("weak-password")) return "Please choose a stronger password!";
+  // The database rules reject a profile write when the username was taken in the meantime.
+  if (message.toLowerCase().includes("permission")) return "Username is in use!";
+  return "Sign-up failed. Please try again.";
+};
+
 const Join = ({ close }) => {
+  const { setContext } = useContext(AppContext);
   const {
     register,
     handleSubmit,
@@ -15,40 +30,36 @@ const Join = ({ close }) => {
     isUsernameTaken(data.username)
       .then((taken) => {
         if (taken) {
-          return toast.error("Username is in use!", {
-                  position: toast.POSITION.TOP_CENTER,
-                  autoClose: 3000,
-          })
+          return toast.error("Username is in use!", TOAST_OPTIONS);
         }
 
-        return registerUser(data.email, data.password).then(
-          (userCredential) => {
-            createUser(
-              data.firstName,
-              data.lastName,
-              data.username,
-              userCredential.user.uid,
-              data.email,
-              data.gender,
-              data.phoneNumber
-            ).then(() => {
+        return registerUser(data.email, data.password).then(({ user }) =>
+          createUser(
+            data.firstName,
+            data.lastName,
+            data.username,
+            user.uid,
+            data.email,
+            data.gender,
+            data.phoneNumber
+          )
+            .catch((err) =>
+              // Don't leave a login behind that has no profile to go with it.
+              deleteAccount(user)
+                .catch(() => {})
+                .then(() => {
+                  throw err;
+                })
+            )
+            .then((userData) => {
+              // App's own profile lookup can run before this write lands, so set it here.
+              setContext({ user, userData });
               close();
-              toast.success("Welcome!", {
-                position: toast.POSITION.TOP_CENTER,
-                autoClose: 3000,
-              });
-            });
-          }
+              toast.success("Welcome!", TOAST_OPTIONS);
+            })
         );
       })
-      .catch((err) => {
-        if (err.message.includes("email-already-in-use")) {
-          toast.error("Email is in use!", {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: 3000,
-          });
-        };
-      });
+      .catch((err) => toast.error(signUpErrorMessage(err), TOAST_OPTIONS));
   };
 
   return (

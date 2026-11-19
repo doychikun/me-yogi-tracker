@@ -1,27 +1,38 @@
 {
   "rules": {
     "users": {
-      ".read": "auth != null",
+      ".read": "auth != null && query.orderByChild == 'uid' && query.equalTo == auth.uid",
       ".indexOn": [
         "uid"
       ],
       "$username": {
+        ".read": "auth != null && data.child('uid').val() === auth.uid",
         ".write": "auth != null && ((!data.exists() && newData.child('uid').val() === auth.uid) || data.child('uid').val() === auth.uid)",
+        ".validate": "newData.child('uid').val() === auth.uid",
         "uid": {
           ".read": true
+        },
+        "avatarUrl": {
+          ".validate": "newData.isString() && newData.val().length < 200000"
         }
       }
     },
     "goals": {
       ".read": "auth != null",
       "$owner": {
-        ".write": "auth != null && root.child('users/' + $owner + '/uid').val() === auth.uid"
+        ".write": "auth != null && root.child('users/' + $owner + '/uid').val() === auth.uid",
+        "$goalId": {
+          ".validate": "newData.hasChildren(['id', 'name', 'owner', 'goal', 'progress', 'from', 'to']) && newData.child('id').val() === $goalId && newData.child('owner').val() === $owner && newData.child('name').isString() && newData.child('name').val().length <= 200"
+        }
       }
     },
     "sessions": {
       "$owner": {
         ".read": "auth != null && root.child('users/' + $owner + '/uid').val() === auth.uid",
-        ".write": "auth != null && root.child('users/' + $owner + '/uid').val() === auth.uid"
+        ".write": "auth != null && root.child('users/' + $owner + '/uid').val() === auth.uid",
+        "$sessionId": {
+          ".validate": "newData.hasChildren(['id', 'date', 'style', 'minutes']) && newData.child('id').val() === $sessionId && newData.child('minutes').isNumber() && newData.child('minutes').val() >= 1 && newData.child('minutes').val() <= 600 && (!newData.hasChild('note') || newData.child('note').val().length <= 200)"
+        }
       }
     }
   }

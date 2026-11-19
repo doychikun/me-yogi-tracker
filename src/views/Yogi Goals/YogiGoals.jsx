@@ -1,8 +1,8 @@
 import './YogiGoals.css'
 import GoalChart from './GoalChart/GoalChart'
 import { Grid, Box, Button, Typography, Paper } from '@mui/material'
-import { getAllCustomerGoals } from '../../services/goals/goals'
-import { useState, useEffect, useContext, useMemo } from 'react'
+import { getUserGoals } from '../../services/goals/goals'
+import { useState, useEffect, useContext, useMemo, useCallback } from 'react'
 import FilterResults from './FilterResults/FilterResults'
 import CustomDialog from '../../components/CustomDialog/CustomDialog'
 import GoalAddEdit from './GoalChart/GoalAddEdit/GoalAddEdit'
@@ -24,16 +24,17 @@ const YogiGoals = () => {
   const closeAdd = () => setOpenDialog(false)
   const openAdd = () => setOpenDialog(true)
 
+  // Single source of truth for "my goals": every add/edit/remove/copy calls this.
+  // FilterResults resets the filtered list whenever unfilteredGoals changes.
+  const refreshGoals = useCallback(() =>
+    getUserGoals({ owner: userData.username })
+      .then(setUnfilteredGoals)
+      .catch(e => alert(e.message))
+  , [userData])
+
   useEffect(() => {
-    getAllCustomerGoals({ owner: userData.username })
-      .then(snapshot => {
-        const goals = snapshot.val() ? Object.keys(snapshot.val())
-            .reduce((goalsArray, currentKey) => [...goalsArray, snapshot.val()[currentKey]], []) : null
-        setUnfilteredGoals(goals)
-        setFilteredGoals(goals)
-      }
-      )
-  }, [userData])
+    refreshGoals()
+  }, [refreshGoals])
 
 
   const [sessions, setSessions] = useState([])
@@ -108,34 +109,31 @@ const YogiGoals = () => {
             </Grid>
           </Grid>
         </Grid>
-        {foundGoals && 
+        {foundGoals?.length > 0 &&
           <Grid item xs={12}>
             <Typography variant='h4' textAlign={'start'}>Found goals</Typography>
           </Grid>
         }
-        {foundGoals?.length && foundGoals.map((goal) => (
-          <Grid item key={goal.id}>
-            <GoalChart data={goal} setFilteredGoals={setFilteredGoals} isGoalFromCurrentUser={goal.owner === userData.username} unfilteredGoals={unfilteredGoals} setUnfilteredGoals={setUnfilteredGoals} />
+        {foundGoals?.length > 0 && foundGoals.map((goal) => (
+          <Grid item key={`${goal.owner}/${goal.id}`}>
+            <GoalChart data={goal} refreshGoals={refreshGoals} isGoalFromCurrentUser={goal.owner === userData.username} />
           </Grid>
         ))}
 
-        {filteredGoals && 
+        {filteredGoals?.length > 0 &&
           <Grid item xs={12}>
             <Typography variant='h4' textAlign={'start'}>My Goals</Typography>
           </Grid>
         }
-        {filteredGoals?.length && filteredGoals.map((goal) => (
+        {filteredGoals?.length > 0 && filteredGoals.map((goal) => (
           <Grid item key={goal.id}>
-            <GoalChart data={goal} setUnfilteredGoals={setUnfilteredGoals} isGoalFromCurrentUser={goal.owner === userData.username}/>
+            <GoalChart data={goal} refreshGoals={refreshGoals} isGoalFromCurrentUser={goal.owner === userData.username}/>
           </Grid>
         ))}
       </Grid>
-      <CustomDialog
-        Component={() => <GoalAddEdit close={closeAdd} setUnfilteredGoals={setUnfilteredGoals} />}
-        title={'Add'}
-        open={openDialog}
-        close={closeAdd}
-      />
+      <CustomDialog title={'Add'} open={openDialog} close={closeAdd}>
+        <GoalAddEdit close={closeAdd} refreshGoals={refreshGoals} />
+      </CustomDialog>
     </Box>
   )
 }
