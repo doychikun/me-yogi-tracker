@@ -1,12 +1,7 @@
 import "./ProfileInfo.css";
 import { useContext } from "react";
 import AppContext from "../../providers/AppContext";
-import {
-  getDownloadURL,
-  ref as storageRef,
-  uploadBytes,
-} from "firebase/storage";
-import { storage } from "../../config/firebase-config";
+import { fileToAvatarDataUrl } from "../../services/avatar";
 import { updateUserProfilePicture } from "../../services/users.service";
 import { toast } from "react-toastify";
 
@@ -21,29 +16,25 @@ const ProfileInfo = ({ enterEditMode }) => {
 
     if (!file) return alert("Please select a file!");
 
-    const image = storageRef(storage, `images/${username}/avatar`);
-
-    uploadBytes(image, file)
-      .then((snapshot) => {
-        return getDownloadURL(snapshot.ref).then((url) => {
-          return updateUserProfilePicture(username, url).then(() => {
-            setContext({
-              user,
-              userData: {
-                ...userData,
-                avatarUrl: url,
-              },
-            });
-            toast.success(`Profile picture successfully updated!`, {
-              position: toast.POSITION.TOP_CENTER,
-              autoClose: 3000,
-            });
+    fileToAvatarDataUrl(file)
+      .then((url) => {
+        return updateUserProfilePicture(username, url).then(() => {
+          setContext({
+            user,
+            userData: {
+              ...userData,
+              avatarUrl: url,
+            },
+          });
+          toast.success(`Profile picture successfully updated!`, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 3000,
           });
         });
       })
       .catch((error) => {
         console.log(error.message);
-        toast.error("Something went wrong!", {
+        toast.error(error.message || "Something went wrong!", {
           position: toast.POSITION.TOP_CENTER,
           autoClose: 3000,
         });

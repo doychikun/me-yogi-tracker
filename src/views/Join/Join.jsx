@@ -1,6 +1,6 @@
 import "./Join.css";
 import { useForm } from "react-hook-form";
-import { createUser, getUserByUsername } from "../../services/users.service";
+import { createUser, isUsernameTaken } from "../../services/users.service";
 import { registerUser } from "../../services/auth.service";
 import { toast } from "react-toastify";
 
@@ -12,9 +12,9 @@ const Join = ({ close }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    getUserByUsername(data.username)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
+    isUsernameTaken(data.username)
+      .then((taken) => {
+        if (taken) {
           return toast.error("Username is in use!", {
                   position: toast.POSITION.TOP_CENTER,
                   autoClose: 3000,
@@ -30,7 +30,6 @@ const Join = ({ close }) => {
               userCredential.user.uid,
               data.email,
               data.gender,
-              data.password,
               data.phoneNumber
             ).then(() => {
               close();

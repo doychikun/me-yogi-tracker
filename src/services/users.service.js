@@ -12,7 +12,14 @@ export const getUserByUsername = (username) => {
   return get(ref(db, `users/${username}`));
 };
 
-export const createUser = (firstName, lastName, username, uid, email, gender, password, phoneNumber) => {
+// Only the uid is publicly readable (see database.rules.json), so sign-up can
+// check whether a username is taken before the account exists.
+export const isUsernameTaken = (username) => {
+  return get(ref(db, `users/${username}/uid`)).then((snapshot) => snapshot.exists());
+};
+
+// Passwords are handled by Firebase Authentication and never stored here.
+export const createUser = (firstName, lastName, username, uid, email, gender, phoneNumber) => {
   return set(ref(db, `users/${username}`), {
     firstName,
     lastName,
@@ -20,7 +27,6 @@ export const createUser = (firstName, lastName, username, uid, email, gender, pa
     uid,
     email,
     gender,
-    password,
     phoneNumber,
   });
 };

@@ -14,7 +14,7 @@
     npm start
     ```
   - The "Yogi Practices" videos come from the RapidAPI YouTube search API. Copy `.env.example` to `.env.local` and set `REACT_APP_RAPIDAPI_KEY` to your own key before running `npm start` (restart the dev server after changing it). Note that any `REACT_APP_` value is bundled into the built site, so use a key restricted to this API.
-  - We are also using Google Firebase Hosting service. You can check our project by using the following link: https://fitness-tracker-app-f7bc9.web.app/
+  - We are also using Google Firebase Hosting service. You can check our project by using the following link: https://meyogi-6924a.web.app/
 
 ## List of features:
 
