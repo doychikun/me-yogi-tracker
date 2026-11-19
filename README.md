@@ -15,6 +15,7 @@
     ```
   - The "Yogi Practices" videos come from the RapidAPI YouTube search API. Copy `.env.example` to `.env.local` and set `REACT_APP_RAPIDAPI_KEY` to your own key before running `npm start` (restart the dev server after changing it). Note that any `REACT_APP_` value is bundled into the built site, so use a key restricted to this API.
   - The live app is hosted on Firebase Hosting: https://meyogi-6924a.web.app/
+  - Source code: https://github.com/doychikun/me-yogi-tracker
   - Firebase project: `meyogi-6924a` (free Spark plan). To deploy the site and the Realtime Database rules from `database.rules.json`, run:
 
     ```
