@@ -1,11 +1,11 @@
-# MyYoga Tracking app
+# MeYogi Tracker
 
 <img src="./src/assets/images/Logo.png" alt="drawing" width="200px" height="200px"/>
 
 
 ## Project Description
 
-  - **MyYoga** is a single page application where you can get to know more about yoga, get access to various yoga videos, track your progress and become a true Yogi. Out of the box, the application provides you with the ability to access "Yogi Practices" page. There you can find 5 different styles of yoga practice videos, and get to know the Yogi world. The application also lets you register and get access to the "Yogi Goals" section. There you can track personal progress for one or more of the five yoga styles. You can also add, edit and remove  goals, filter the goals using a calendar and more!
+  - **MeYogi** is a single page application where you can get to know more about yoga, get access to various yoga videos, track your progress and become a true Yogi. Out of the box, the application provides you with the ability to access "Yogi Practices" page. There you can find 5 different styles of yoga practice videos, and get to know the Yogi world. The application also lets you register and get access to the "Yogi Goals" section. There you can track personal progress for one or more of the five yoga styles. You can also add, edit and remove  goals, filter the goals using a calendar and more!
 
   - There are a few dependencies you need to run - `react`, `firebase`, `react-toastify`, etc. To install the dependencies and be able to run the project, just run the following commands in cmd:
 
