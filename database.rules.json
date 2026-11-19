@@ -1,0 +1,28 @@
+{
+  "rules": {
+    "users": {
+      ".read": "auth != null",
+      ".indexOn": [
+        "uid"
+      ],
+      "$username": {
+        ".write": "auth != null && ((!data.exists() && newData.child('uid').val() === auth.uid) || data.child('uid').val() === auth.uid)",
+        "uid": {
+          ".read": true
+        }
+      }
+    },
+    "goals": {
+      ".read": "auth != null",
+      "$owner": {
+        ".write": "auth != null && root.child('users/' + $owner + '/uid').val() === auth.uid"
+      }
+    },
+    "sessions": {
+      "$owner": {
+        ".read": "auth != null && root.child('users/' + $owner + '/uid').val() === auth.uid",
+        ".write": "auth != null && root.child('users/' + $owner + '/uid').val() === auth.uid"
+      }
+    }
+  }
+}
