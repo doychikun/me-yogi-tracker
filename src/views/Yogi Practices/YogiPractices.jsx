@@ -65,7 +65,7 @@ function YogiPractices() {
       sx={{ mt: { lg: "100px" } }}
     >
       <Typography variant="h4" mb="60px">
-        Yogi Practices created by our team
+        Yogi Practices handpicked for you
       </Typography>
       <PrimaryButton1 text="Vinyasa Flow"
       on={() => {

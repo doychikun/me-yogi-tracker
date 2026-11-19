@@ -11,7 +11,7 @@ const YogiPracticesVideos = ({ practiceVideos }) => {
       sx={{ marginTop: { lg: "60px", xs: "20px" } }}
     >
       {/* <Typography className="top-videos-text" variant="h4" mb="33px">
-        Watch the best <span>Yogi practices</span> created by our team
+        Watch the best <span>Yogi practices</span> handpicked for you
       </Typography> */}
       <Stack
         className="youtube-videos-stack"

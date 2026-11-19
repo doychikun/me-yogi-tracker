@@ -9,12 +9,25 @@
   text-align: center;
 } */
 
-.About {
-  font-size:x-large;
-  margin: 100px;
-  font-style:italic;
-  color:rgb(126, 87, 163);
+.AboutUs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.About {
+  font-size: x-large;
+  margin: 40px 24px 100px;
+  max-width: 900px;
+  font-style: italic;
+  text-align: center;
+  color: rgb(126, 87, 163);
+}
+
+.card-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
 }
 
 .Team {
@@ -57,7 +70,7 @@ html, body {
 .card-list {
 	display: block;
 	margin: 1rem auto;
-	padding: 60px;
+	padding: 20px 60px;
 	font-size: 0;
 	text-align: center;
 	list-style: none;
