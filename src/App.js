@@ -20,7 +20,7 @@ import YogiGoals from "./views/Yogi Goals/YogiGoals";
 import YogiPractices from "./views/Yogi Practices/YogiPractices";
 import Poses from "./views/Poses/Poses";
 import FlowPlayer from "./views/Poses/FlowPlayer";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
@@ -36,28 +36,40 @@ function App() {
   });
 
   const [user, loading] = useAuthState(auth);
+  // uid whose profile lookup has finished, so protected pages know when to decide
+  const [checkedUid, setCheckedUid] = useState(null);
 
   useEffect(() => {
-    if (user === null) return;
+    if (!user) return;
+
+    let cancelled = false;
 
     getUserData(user.uid)
       .then((snapshot) => {
-        if (!snapshot.exists()) {
-          throw new Error("Something went wrong!");
-        }
+        // No profile yet means sign-up is still saving it; Join sets the context itself.
+        if (cancelled || !snapshot.exists()) return;
 
         setAppState({
           user,
-          userData: snapshot.val()[Object.keys(snapshot.val())[0]],
+          userData: Object.values(snapshot.val())[0],
         });
       })
-      .catch((e) => alert(e.message));
+      .catch((e) => toast.error(e.message))
+      .finally(() => {
+        if (!cancelled) setCheckedUid(user.uid);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [user]);
+
+  const authPending = loading || (!!user && checkedUid !== user.uid && !appState.user);
 
   return (
     <>
       <BrowserRouter>
-        <AppContext.Provider value={{ ...appState, setContext: setAppState }}>
+        <AppContext.Provider value={{ ...appState, authPending, setContext: setAppState }}>
           <ThemeProvider theme={theme}>
             <div className="App">
               {loading ? <Loader /> : <Header />}

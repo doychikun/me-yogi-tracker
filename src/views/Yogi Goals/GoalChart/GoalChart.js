@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, ThemeProvider, createTheme, CardActions,
 import { Delete, Edit, Add } from '@mui/icons-material'
 import CustomDialog from '../../../components/CustomDialog/CustomDialog'
 import GoalAddEdit from './GoalAddEdit/GoalAddEdit'
-import { getAllCustomerGoals, removeGoal, createGoal } from '../../../services/goals/goals'
+import { removeGoal, createGoal } from '../../../services/goals/goals'
 import AppContext from "../../../providers/AppContext"
 import { v4 as uuidv4 } from 'uuid';
 
@@ -38,7 +38,7 @@ const CustomSlice = ({ datum, ...props}) =>
     />
 
 
-const GoalChart = ({ data, setFilteredGoals,  setUnfilteredGoals, isGoalFromCurrentUser }) => { 
+const GoalChart = ({ data, refreshGoals, isGoalFromCurrentUser }) => {
     const { userData } = useContext(AppContext)
     const [chartData, setChartData] = useState({
         progress: data.progress,
@@ -50,30 +50,11 @@ const GoalChart = ({ data, setFilteredGoals,  setUnfilteredGoals, isGoalFromCurr
 
     const openEdit = () => setOpenDialog(true)
 
-    const getGoals = ({ updateGoals = false }) => 
-        getAllCustomerGoals({ owner: userData.username })
-            .then(snapshot => {
-                const goals = snapshot.val() ?
-                    Object.keys(snapshot.val())
-                        .reduce((goalsArray, currentKey) =>
-                            [...goalsArray, snapshot.val()[currentKey] ]
-                    , [])
-                : null
-                
-                if (goals) {
-                    if (updateGoals) {
-                        setFilteredGoals(goals)
-                    } else {
-                        setUnfilteredGoals(goals)
-                    }
-                }
-            })
-
     const removeGoalChart = () => {
         removeGoal({
             id: data.id,
             owner: data.owner
-        }).then(() => getGoals({updateGoals: false}))
+        }).then(refreshGoals)
     }
     
     const addGoalChartToCurrentUser = () => {
@@ -87,7 +68,7 @@ const GoalChart = ({ data, setFilteredGoals,  setUnfilteredGoals, isGoalFromCurr
             unit,
             from,
             to,
-        }).then(() => getGoals({updateGoals: true}))
+        }).then(refreshGoals)
     }
 
     useEffect(() => {
@@ -161,12 +142,9 @@ const GoalChart = ({ data, setFilteredGoals,  setUnfilteredGoals, isGoalFromCurr
 
                 </CardActions>
             </Card>
-            <CustomDialog
-                Component={() => <GoalAddEdit close={closeEdit} setUnfilteredGoals={setUnfilteredGoals} currentGoalData={data} setChartData={setChartData} />}
-                title={'Edit'}
-                open={openDialog}
-                close={closeEdit}
-            />
+            <CustomDialog title={'Edit'} open={openDialog} close={closeEdit}>
+                <GoalAddEdit close={closeEdit} refreshGoals={refreshGoals} currentGoalData={data} />
+            </CustomDialog>
         </ThemeProvider>
     )
 }

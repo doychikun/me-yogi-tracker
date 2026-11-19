@@ -4,36 +4,27 @@ import Edit from '@mui/icons-material/Edit'
 import Add from '@mui/icons-material/Add'
 import { useEffect, useContext } from 'react'
 import AppContext from "../../../../providers/AppContext"
-import { getAllCustomerGoals, createGoal, updateGoal } from '../../../../services/goals/goals'
+import { createGoal, updateGoal } from '../../../../services/goals/goals'
 import { format } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid';
 
-const GoalAddEdit = ({ currentGoalData, close, setUnfilteredGoals, setChartData }) => {
+const GoalAddEdit = ({ currentGoalData, close, refreshGoals }) => {
     const { userData } = useContext(AppContext)
     const {
         register,
         handleSubmit,
         setValue,
         formState: { errors },
-    } = useForm()   
+    } = useForm()
 
-    const getGoalsAndCloseDialog = () => 
-        getAllCustomerGoals({ owner: userData.username })
-            .then(snapshot =>
-                snapshot.val() && setUnfilteredGoals(
-                    snapshot.val()
-                        ? Object.keys(snapshot.val())
-                            .reduce((goalsArray, currentKey) =>
-                                [...goalsArray, snapshot.val()[currentKey] ]
-                            , [])
-                    : null
-                )
-            ).then(() => close())
+    const getGoalsAndCloseDialog = () => refreshGoals().then(() => close())
 
     const onSubmit = (data) => {
         if (data) {
-            const { name, owner, goal, progress, unit, from, to } = data
-            
+            const { name, goal, progress, unit, from, to } = data
+            // The owner field is display-only; take the owner from the signed-in user / the goal itself.
+            const owner = currentGoalData ? currentGoalData.owner : userData.username
+
             if (!currentGoalData) {
                 createGoal({
                     id: uuidv4(),
@@ -58,12 +49,7 @@ const GoalAddEdit = ({ currentGoalData, close, setUnfilteredGoals, setChartData 
                         from,
                         to,
                     }
-                }).then(getGoalsAndCloseDialog).then(() => {
-                    setChartData({
-                        progress,
-                        data: [{ y: goal - progress, background: true }, { y: progress }]
-                    })
-                })
+                }).then(getGoalsAndCloseDialog)
             }
         }
     }   

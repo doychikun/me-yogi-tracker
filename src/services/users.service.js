@@ -1,13 +1,7 @@
 import { get, ref, query, set, update, orderByChild, equalTo } from "firebase/database";
 import { db } from "../config/firebase-config";
 
-/**
- * Get all users
- */
-export const getAllUsers = () => {
-  return get(query(ref(db, "users")));
-};
-
+// Each user can read only their own record (see database.rules.json).
 export const getUserByUsername = (username) => {
   return get(ref(db, `users/${username}`));
 };
@@ -19,8 +13,9 @@ export const isUsernameTaken = (username) => {
 };
 
 // Passwords are handled by Firebase Authentication and never stored here.
+// Resolves to the stored profile.
 export const createUser = (firstName, lastName, username, uid, email, gender, phoneNumber) => {
-  return set(ref(db, `users/${username}`), {
+  const userData = {
     firstName,
     lastName,
     username,
@@ -28,9 +23,13 @@ export const createUser = (firstName, lastName, username, uid, email, gender, ph
     email,
     gender,
     phoneNumber,
-  });
+  };
+
+  return set(ref(db, `users/${username}`), userData).then(() => userData);
 };
 
+// The rules only allow this exact query (uid equal to your own), so a user
+// can find their own record without being able to list everyone else's.
 export const getUserData = (uid) => {
   return get(query(ref(db, "users"), orderByChild("uid"), equalTo(uid)));
 }
@@ -41,6 +40,6 @@ export const updateUserProfilePicture = (username, url) => {
   });
 };
 
-export const updateUserData = (uid, updates) => {
-  return update(ref(db, `users/${uid}`), updates);
+export const updateUserData = (username, updates) => {
+  return update(ref(db, `users/${username}`), updates);
 };
