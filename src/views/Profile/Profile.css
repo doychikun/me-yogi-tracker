@@ -1,5 +1,15 @@
-.Profile {
-  max-width: 800px;
-  margin: 200px auto;
-  text-align: center;
+.profile {
+  width: min(480px, 100%);
+  margin: 0 auto;
+}
+
+/* Standalone /profile page (outside the dialog) */
+.Content > .profile {
+  margin: 60px auto 140px;
+}
+
+/* Inside the header dialog the dialog itself is the card */
+.MuiDialogContent-root .profile-card,
+.MuiDialogContent-root .edit-form {
+  box-shadow: 0 2px 12px rgba(148, 148, 182, 0.12);
 }

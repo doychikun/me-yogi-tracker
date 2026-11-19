@@ -17,9 +17,9 @@ const Header = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogComponent, setDialogComponent] = useState('join');
   const dialogComponents = {
-    join: {component: Join, title: 'Join us'},
-    login: {component: Login, title: 'Login'},
-    profile: {component: Profile, title: 'User Profile'}
+    join: {component: Join, title: 'Join MeYogi'},
+    login: {component: Login, title: 'Log in'},
+    profile: {component: Profile, title: 'Your profile'}
   };
  
   const DialogBody = dialogComponents[dialogComponent].component;
@@ -97,7 +97,7 @@ const Header = () => {
         open={openDialog}
         close={handleClose}
       >
-        <DialogBody close={handleClose} />
+        <DialogBody close={handleClose} switchTo={handleDialog} />
       </CustomDialog>
     </Stack>
   );

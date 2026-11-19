@@ -36,3 +36,10 @@ body {
     height: 300px;
   }
 }
+
+/* Toasts in the site's colors */
+.Toastify__toast--success,
+.Toastify__toast--error {
+  background: #F9FAF4 !important;
+  color: #9494B6 !important;
+}

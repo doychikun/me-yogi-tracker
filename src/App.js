@@ -18,6 +18,7 @@ import Profile from "./views/Profile/Profile";
 import AboutUs from "./views/AboutUs/AboutUs";
 import YogiGoals from "./views/Yogi Goals/YogiGoals";
 import YogiPractices from "./views/Yogi Practices/YogiPractices";
+import AuthPage from "./components/AuthPage/AuthPage";
 import Poses from "./views/Poses/Poses";
 import FlowPlayer from "./views/Poses/FlowPlayer";
 import { ToastContainer, toast } from "react-toastify";
@@ -77,8 +78,8 @@ function App() {
                 <Routes>
                   <Route index element={<Home />} />
                   <Route path="/home" element={<Home />} />
-                  <Route path="/join" element={<Join />} />
-                  <Route path="/login" element={<Login />} />
+                  <Route path="/join" element={<AuthPage title="Join MeYogi" Form={Join} />} />
+                  <Route path="/login" element={<AuthPage title="Log in" Form={Login} />} />
                   <Route path="/about-us" element={<AboutUs />} />
                   <Route path="/yogi-practices" element={<YogiPractices />} />
                   <Route path="/poses" element={<Poses />} />
