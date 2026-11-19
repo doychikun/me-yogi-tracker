@@ -11,7 +11,7 @@ const Footer = () => {
         <img src={Logo} alt="MeYogi logo" className="footer-logo" />
         <Link to="/about-us" className="footer-nav">
           <Typography id="footer-text">
-            Made with <FavoriteTwoToneIcon /> by Nikola, Sasho and Yana
+            Made with <FavoriteTwoToneIcon /> by Nikola Doychev
           </Typography>
         </Link>
       </Stack>

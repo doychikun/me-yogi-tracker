@@ -39,7 +39,7 @@
 
   - **Profile** - Lets you upload a profile image and access basic information about your profile, such as username, email, phone number, etc. You can also edit your profile information with a click of a button.
 
-  - **About** -  Provides information about the creators of the app.
+  - **About** -  Introduces the creator of the app, Nikola Doychev.
 
 ## Tech Stack:
 
@@ -98,9 +98,7 @@ We also used the following libraries and packets:
   ![display about view](./src/assets/readme-imgs/About.png)
 
 
-## Authors and Acknowledgment
-  - Nikola Doychev - https://gitlab.com/doychikun
-
-  - Sasho Milenov - https://gitlab.com/sasashi33
-
-  - Yana Sheinkova - https://gitlab.com/YanaSheinkova
+## Author
+  - Nikola Doychev
+    - GitHub: https://github.com/doychikun
+    - GitLab: https://gitlab.com/doychikun
