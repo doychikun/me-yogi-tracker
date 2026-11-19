@@ -15,11 +15,15 @@
 }
 
 #big-text {
-  color: #E8E5EE;
-  font-weight: 650;
+  /* Soft lavender-to-gold wash: still a background accent, but readable */
+  background: linear-gradient(90deg, #c9c6dd 0%, #ebd7b0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
   font-size: 150px;
-  opacity: 0.5;
-  /* margin-top: 10px; */
+  line-height: 1.15;
+  letter-spacing: -2px;
 }
 
 #intro-text {

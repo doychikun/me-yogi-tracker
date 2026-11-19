@@ -1,7 +1,33 @@
-.join-form {
+/* Older forms (login fallback, goals) still use these plain-input styles.
+   The newer MUI-based forms opt out with the .yogi-form class. */
+form:not(.yogi-form) div {
+  padding: 10px;
   margin: 0 auto;
-  width: 500px;
-  padding: 30px;
+}
+
+form:not(.yogi-form) input,
+form:not(.yogi-form) select {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+
+form:not(.yogi-form) button {
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  padding: 10px;
+  background: #F8C55C;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+form:not(.yogi-form) button:hover {
+  background: #9494B6;
+  color: white;
 }
 
 .error {
@@ -15,32 +41,41 @@
   margin: 5px;
 }
 
-form div {
-  padding: 10px;
+/* Join / Login */
+.join-form {
+  width: min(460px, 100%);
   margin: 0 auto;
+  padding: 4px 0 8px;
 }
 
-form input, form select {
-  padding: 10px;
-  width: 100%;
-  border: none;
-  border: 1px solid lightgray;
-  border-radius: 5px;
+.join-form .form-intro {
+  color: #6f6f86;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
-form button {
-  border: none;
-  border-radius: 10px;
-  width: 100%;
-  padding: 10px;
-  background: #F8C55C;
-  cursor: pointer;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.yogi-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-form button:hover {
-  background: #9494B6;
-  color: white;
+.yogi-form .form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.yogi-form .form-switch {
+  text-align: center;
+  font-size: 14px;
+  color: #6f6f86;
+  margin-top: 12px;
+}
+
+@media (max-width: 520px) {
+  .yogi-form .form-row {
+    flex-direction: column;
+    gap: 6px;
+  }
 }

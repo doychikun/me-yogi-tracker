@@ -1,53 +1,20 @@
-.Toastify__toast--success {
-  background: #F9FAF4 /*#E8E5E*/ !important;
-  color: #9494B6 !important;
-  /* border: 1px solid #9494B6; */
-  /* border-radius: 50px !important; */
-}
-
-.Toastify__toast--error {
-  background: #F9FAF4 /*#E8E5E*/ !important;
-  color: #9494B6 !important;
-  /* border: 1px solid #9494B6; */
-  /* border-radius: 50px !important; */
-}
 
 .edit-form {
-  padding: 30px;
-  padding-bottom: 30px;
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(148, 148, 182, 0.18);
 }
 
-.edit-text {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-form div {
-  padding: 10px;
-  margin: 0 auto;
-}
-
-form input, form select {
-  padding: 10px;
-  width: 100%;
-  border: none;
-  border: 1px solid lightgray;
-  border-radius: 5px;
-}
-
-form button {
-  border: none;
-  border-radius: 10px;
-  width: 100%;
-  padding: 10px;
-  background: #F8C55C;
-  cursor: pointer;
+.edit-title.MuiTypography-root {
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: 20px;
+  margin-bottom: 16px;
 }
 
-form button:hover {
-  background: #9494B6;
-  color: white;
+.edit-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
 }

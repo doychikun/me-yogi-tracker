@@ -16,17 +16,17 @@ jest.mock('../../services/users.service', () => ({
   createUser: jest.fn(),
 }))
 
-const fill = (placeholder, value) =>
-  fireEvent.change(screen.getByPlaceholderText(placeholder), { target: { value } })
+const fill = (label, value) =>
+  fireEvent.change(screen.getByLabelText(new RegExp(`^${label}`)), { target: { value } })
 
 const submitForm = () => {
-  fill('First Name*', 'Niki')
-  fill('Last Name*', 'D')
-  fill('Username*', 'niki')
-  fill('Email*', 'niki@example.test')
-  fill('Password*', 'longenough')
-  fill('Phone Number*', '0888123456')
-  fireEvent.click(screen.getByRole('button', { name: /submit/i }))
+  fill('First name', 'Niki')
+  fill('Last name', 'D')
+  fill('Username', 'niki')
+  fill('Email', 'niki@example.test')
+  fill('Password', 'longenough')
+  fill('Phone number', '0888 123 456')
+  fireEvent.click(screen.getByRole('button', { name: /create account/i }))
 }
 
 const renderJoin = () => {
@@ -55,6 +55,13 @@ it('signs the new user in with their saved profile', async () => {
   submitForm()
 
   await waitFor(() => expect(setContext).toHaveBeenCalledWith({ user: firebaseUser, userData: profile }))
+  expect(createUser).toHaveBeenCalledWith(expect.objectContaining({
+    username: 'niki',
+    uid: 'uid-1',
+    phoneNumber: '+359 888123456',
+    phoneCountry: 'BG',
+  }))
+  expect(createUser.mock.calls[0][0]).not.toHaveProperty('gender')
   expect(close).toHaveBeenCalled()
   expect(deleteAccount).not.toHaveBeenCalled()
 })
@@ -68,4 +75,26 @@ it('removes the new login again when the profile cannot be saved', async () => {
   await waitFor(() => expect(deleteAccount).toHaveBeenCalledWith(firebaseUser))
   expect(setContext).not.toHaveBeenCalled()
   expect(close).not.toHaveBeenCalled()
+})
+
+it('accepts a phone number that is not 10 digits', async () => {
+  createUser.mockResolvedValue({ username: 'niki' })
+  renderJoin()
+
+  fill('First name', 'Niki')
+  fill('Last name', 'D')
+  fill('Username', 'niki')
+  fill('Email', 'niki@example.test')
+  fill('Password', 'longenough')
+  fill('Phone number', '88 812 345')
+  fireEvent.click(screen.getByRole('button', { name: /create account/i }))
+
+  await waitFor(() => expect(createUser).toHaveBeenCalled())
+  expect(screen.queryByText(/10 digits/)).toBeNull()
+})
+
+it('has no sex / gender field', () => {
+  renderJoin()
+  expect(screen.queryByText(/sex/i)).toBeNull()
+  expect(screen.queryByRole('combobox', { name: /gender|sex/i })).toBeNull()
 })

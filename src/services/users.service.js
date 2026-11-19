@@ -13,16 +13,18 @@ export const isUsernameTaken = (username) => {
 };
 
 // Passwords are handled by Firebase Authentication and never stored here.
+// phoneNumber is stored with its country code, e.g. "+359 888123456".
 // Resolves to the stored profile.
-export const createUser = (firstName, lastName, username, uid, email, gender, phoneNumber) => {
+export const createUser = ({ firstName, lastName, username, uid, email, phoneNumber, phoneCountry }) => {
   const userData = {
     firstName,
     lastName,
     username,
     uid,
     email,
-    gender,
     phoneNumber,
+    phoneCountry,
+    createdOn: Date.now(),
   };
 
   return set(ref(db, `users/${username}`), userData).then(() => userData);
